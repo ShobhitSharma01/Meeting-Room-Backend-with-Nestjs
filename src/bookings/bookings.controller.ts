@@ -4,37 +4,44 @@ import {
   Post,
   Body,
   Param,
-  Put,
+  Patch,
   Delete,
 } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
+import { BookingDto } from './dto/booking.dto';
+import { UpdateDto } from './dto/update-dto';
 
 @Controller('bookings')
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
+  // Get all bookings
   @Get()
   getAllBookings() {
-    return this.bookingsService.findAll();
+    return this.bookingsService.fetchAllBookings();
   }
 
-  @Get(':id')
-  getBooking(@Param('id') id: string) {
-    return this.bookingsService.findOne(id);
+  // Get bookings by a single employee
+  @Get('employee/:id')
+  getBookingsByEmployee(@Param('id') id: string) {
+    return this.bookingsService.fetchAllBookingsByEmployee(id);
   }
 
+  // Create a new booking
   @Post()
-  addBooking(@Body() booking: any) {
-    return this.bookingsService.create(booking);
+  addBooking(@Body() bookingDto: BookingDto) {
+    return this.bookingsService.create(bookingDto);
   }
 
-  @Put(':id')
-  updateBooking(@Param('id') id: string, @Body() booking: any) {
-    return this.bookingsService.update(id, booking);
+  // Update an existing booking
+  @Patch()
+  updateBooking(@Body() updateDto: UpdateDto) {
+    return this.bookingsService.updateBooking(updateDto);
   }
 
+  // Delete a booking
   @Delete(':id')
   deleteBooking(@Param('id') id: string) {
-    return this.bookingsService.delete(id);
+    return this.bookingsService.deleteBooking(id);
   }
 }
